@@ -34,3 +34,16 @@ export interface Product {
     images:      string[];
     categoryId:  number;
 }
+
+export interface ProductDetails {
+    id: number;
+    title: string;
+    price: number;
+    images: string[];
+    description: string;
+    creationAt: string;
+    category: {
+        name:string,
+        id: number
+    }
+}

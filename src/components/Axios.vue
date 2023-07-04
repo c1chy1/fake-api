@@ -28,10 +28,13 @@
         </div>-->
 
     <div class="hello">
-      <h1>{{ msg }}</h1>
       <h1>Made By Getters</h1>
       <div v-for="product in products" :key="product.id">
+
+        <button @click="addToCart(product.id)" >BUY PRODUCT</button>
+
         {{ product.title}}
+        {{product.id}}
         {{ product.price}}: EURO
 
         <h1> {{product.category.name}}</h1>
@@ -48,6 +51,19 @@
     </div>
 
 
+    <div id="cart">
+
+      <div id="product" v-for="(product , index) in cart" >
+
+        <h1>{{product.title}}</h1>
+        <h1>{{product.id}}</h1>
+<button @click="cart.splice(index, 1)">Remove</button>
+
+      </div>
+
+Summary : {{store.getCartItems}}
+    </div>
+
 
   </section>
 
@@ -55,13 +71,12 @@
 
 <script setup lang="ts">
 
-import {onMounted, reactive, ref , computed , watch} from "vue";
-import {ApolloClient, createHttpLink, InMemoryCache} from '@apollo/client/core'
-import {provideApolloClient} from '@vue/apollo-composable'
-import {useCategories} from "@/stores/categories";
+import {onMounted, ref , computed , watch} from "vue";
 import {useProduct} from "@/stores/products";
 const store = useProduct();
-const msg = ref("Welcome");
+
+
+const isCartOpen = ref(false);
 
 
 
@@ -70,45 +85,52 @@ const products = computed(() => {
 });
 
 
+const productID = computed(() => {
+  return store.product.id
+});
+const cart = computed(() => {
+  return store.cart
+});
+
+
 const categories = computed(() => {
   return store.categories;
 });
+
+
+const showCart = () => {
+  isCartOpen.value = true;
+};
+
+const hideCart = () => {
+  isCartOpen.value = false;
+};
 
 
 
 onMounted(() => {
   store.fetchCategories();
 });
-const id = ref(0)
 
 
-console.log(products)
-
-const httpLink = createHttpLink({
-  // You should use an absolute URL here
-  uri: 'https://api.escuelajs.co/graphql'
-})
-
-const cache = new InMemoryCache()
-
-
-
-const apolloClient = new ApolloClient({
-  link: httpLink,
-  cache,
-})
-
-provideApolloClient(apolloClient);
 
 const category = ref(0)
+
+
+function addToCart(productID:any) {
+
+  store.addToCart(productID)
+
+
+  console.log(cart.value)
+
+}
+
 
 
 watch(category, async () => {
 
   await store.fetchByCategories(category.value)
-
-  console.log(products)
-
 
 })
 
@@ -118,6 +140,15 @@ watch(category, async () => {
 
 <style scoped>
 
+
+#cart {
+
+  position: fixed;
+  right: 0;
+  top: 0;
+z-index: 100;
+
+}
 
 #grid {
 

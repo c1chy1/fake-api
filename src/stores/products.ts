@@ -5,8 +5,8 @@ import axios from 'axios'
 import {products} from "@/apollo/queries/products";
 
 // @ts-ignore
-import {Product} from "@/models/product.model";
-import {Category} from "@/models/Category.model";
+import {Product, ProductDetails} from "@/models/product.model";
+import {Category} from "@/models/category.model";
 
 const test = ref(3)
 
@@ -16,10 +16,22 @@ export const useProduct =
     defineStore("product", {
     state: () => ({
         products: [],
-        categories: []
+        categories: [],
+        cart:[],
+        product: {
+
+            id: 0,
+            title: ''
+
+        }
     }),
     getters: {
-
+        getCart(state){
+            return state.cart
+        },
+        getCartItems(state){
+            return state.cart.length
+        },
         getProducts(state){
             return state.products
         },
@@ -40,6 +52,25 @@ export const useProduct =
                 console.log(error)
             }
         },
+
+        async addToCart(productID: number) {
+
+
+            try {
+                const response = await fetch(`https://api.escuelajs.co/api/v1/products/${productID}`)
+
+                const data = await response.json();
+                this.product = data
+                this.cart.push(this.product)
+
+
+            }
+            catch (error) {
+                alert(error)
+                console.log(error)
+            }
+        },
+
         async fetchByCategories(categoryID: number) {
             try {
                 const data = await axios.get<Product[]>(`https://api.escuelajs.co/api/v1/products/?categoryId=${categoryID}`)
@@ -56,10 +87,7 @@ export const useProduct =
                     },
                     images: [...product.images]
 
-
                 }))
-
-                console.log(this.products)
 
             }
             catch (error) {
