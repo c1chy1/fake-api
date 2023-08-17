@@ -1,14 +1,12 @@
 import { ref, computed , reactive , toRefs} from 'vue'
 import { defineStore } from 'pinia'
-import {useQuery} from "@vue/apollo-composable";
-import axios from 'axios'
-import {products} from "@/apollo/queries/products";
+import axios from "axios";
+import {categories} from "@/apollo/queries/categories";
 
 // @ts-ignore
 import {Product, ProductDetails} from "@/models/product.model";
 import {Category} from "@/models/category.model";
 
-const test = ref(3)
 
 
 export const useProduct =
