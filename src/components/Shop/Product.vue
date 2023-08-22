@@ -24,15 +24,10 @@ import ProductName from "@/components/Shop/ProductName.vue";
 import ProductImage from "@/components/Shop/ProductImage.vue";
 import ProductPrice from "@/components/Shop/ProductPrice.vue";
 import AddToCart from "@/components/Shop/AddToCart.vue";
-import {useProductAxios} from "@/stores/axios";
 
-import cart from "@/stores/cart"
 
-const storeAxios = useProductAxios();
-const storeGraphql = cart;
-
-const props = defineProps<{
-  products:Array<Product>,
+defineProps<{
+  products:Product[],
   store: any
 }>();
 

@@ -1,13 +1,13 @@
 import { gql } from "graphql-tag";
 
 export const categories = gql`
-    query Categories {
+    query categories {
 
         categories {
             id
             name
             image
-        }
+        },
     }
     
 `;
