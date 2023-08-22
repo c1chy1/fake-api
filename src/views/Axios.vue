@@ -30,14 +30,8 @@ const storeAxios = useProductAxios();
 
 const isCartOpen = ref(false);
 
-
-
 const products = computed(() => {
   return storeAxios.products
-});
-
-const cart = computed(() => {
-  return storeAxios.cart
 });
 
 
@@ -54,37 +48,11 @@ const hideCart = () => {
   isCartOpen.value = false;
 };
 
-
-
 onMounted(() => {
   storeAxios.fetchCategories();
 });
 
 
-
-const category = ref(0)
-
-
-function addToCart(productID:any) {
-
-  storeAxios.addToCart(productID)
-
-
-  console.log(cart.value)
-
-}
-
-
-
-watch(category, async () => {
-
-  await storeAxios.fetchByCategories(category.value)
-
-
-  console.log(category.value)
-  console.log(products)
-
-})
 
 
 

@@ -4,245 +4,206 @@ import {reactive, watch} from "vue";
 import {categories} from "@/apollo/queries/categories";
 import {products} from "@/apollo/queries/products";
 import {product} from "@/apollo/queries/product";
-import type {Category, Product, Products} from "@/types/types";
+import { useApolloClient } from "@vue/apollo-composable";
+import type {Cart , Categories} from "@/types/types";
+import type {Category} from "@/models/category.model";
 
 import {computed , ref} from "vue";
-
-const itemsInCart = reactive({ items: [] });
-interface Cart {
-
-    cid: string,
-/*    products: Product[]*/
+import type {ComputedRef} from "vue";
+import {logMissingFieldErrors} from "@apollo/client/core/ObservableQuery";
 
 
-}
+let reactiveTest = reactive([{
 
-interface State {
+    id: 0,
+    name: ''
 
-    cart : Cart | []
-}
-
+}])
 
 
 export const useProductGraphQL =
 
-    defineStore("product", {
-        state: () => ({
-            products:[],
-            categories: {
-                id: 0,
-                name: '',
-                image: ''
+    defineStore("product",
+        {
+            state: () => ({
+                products: [],
+                categories: reactive([{
+                    id: 0,
+                    name: '',
+                    image:''
+                }]) ,
+                cart: [] as Array<Cart>,
+                product: null,
+                categoryID: 0,
+                loading: false,
+                productID: 0,
+                price: 0,
+                quantity: 1,
+                error: {},
+                data: ref([]),
+                flag: false,
+                test: []
+            }),
+            getters: {
+                getCart(state) {
+                    return state.cart
+                },
 
+                getProduct(state) {
+                    return state.product
+                },
+
+                productQuantity(state) {
+
+                    return state.cart.reduce(
+                        (total, product) => total + product.quantity,
+                        0
+                    );
+                },
+                async getProducts(state) {
+                    return state.products
+                },
+                getCategories(state) {
+                    return state.categories
+                },
+                cartTotalPrice(state) {
+                    return state.cart.reduce((total, product) => {
+                        return total + product.price * product.quantity;
+                    }, 0);
+                }
             },
-            product: {
- id:0,
-                title:'',
-                price: 0
-            },
-            loading: false,
-            productID : 0,
-            cart: [],
-            price: 0,
-            quantity: 1,
-            error: null,
-            flag: false
-        }),
-        getters: {
-            getCart(state) {
-                return state.cart
-            },
+            actions: {
 
-           async getProducts(state) {
-                return state.products
-            },
-            getCartItems(state) {
-                return state.cart.length
-            },
-            getCategories(state) {
-                return state.categories
-            },
+                async fetchCategories()  {
+                    this.loading = true;
 
-        },
-        actions: {
+                    const { resolveClient } = useApolloClient();
+                    const apolloClient = resolveClient();
 
-            async fetchCategories() {
+                    try {
+                        const { data: queryData } = await apolloClient.query({
 
+                      query: categories
 
-                const {result} = useQuery(categories, null, {fetchPolicy: 'no-cache', prefetch: true})
+                        });
+                        this.categories = queryData.categories.map((i: any) => ({
 
+                            id: i.id,
+                            name: i.name,
+                            image: i.image,
 
-                this.$state.categories = computed(() => result.value?.categories.map(category => ({
+                        }))
 
-                    id: category.id,
-                    name: category.name,
-                    image: category.image
+                        this.loading = false;
 
-                })) ?? [])
+                        console.log(this.categories)
 
-            },
 
 
-             fetchByCategories(categoryID: number) {
+                    } catch (error) {
+                        console.error('Błąd podczas pobierania danych:', error);
+                        this.loading = false;
+                    }
+                },
 
+              async  fetchByCategories(categoryID : number[] | null) {
 
-                const {result, loading, error} =  useQuery(products, {
 
+                  this.loading = true;
 
-                    categoryId: categoryID
+                  const { resolveClient } = useApolloClient();
+                  const apolloClient = resolveClient();
+                  try {
+                      const  result  = await apolloClient.query({
 
+                          query: products,
+                          variables: {
+                              categoryId: categoryID
+                          }
 
-                } )
+                      });
 
-                 this.$state.products = computed(() => result.value?.products ?? [])
+                      this.products = result.data.products.map((product: any) => ({
+                          id: product.id,
+                          title: product.title,
+                          price: product.price,
+                          images: product.images,
+                          category: {
 
-                this.loading = loading
-                this.error = error
+                              id: product.category.id
 
-            },
+                          }
+                      }));
 
-    addToCart( productID: any ) {
+                      this.loading = false;
 
+                  } catch (error) {
+                      console.error('Błąd podczas pobierania danych:', error);
+                      this.loading = false;
+                  }
 
 
-             try {
+                },
 
+                addToCart(productID: any) {
 
-                 const {result  , loading} =   useQuery(product, {
-                         id: productID
+                    const {result, loading} = useQuery(product, {
+                            id: productID
 
-                     },
+                        },
+                    )
+                    this.product = result.value?.product
 
-                 )
+                    let item = this.cart.find((i) => i.id === productID);
 
-                 const products = useResult(product, [], data => data.product)
+                    if (item) {
+                        item.quantity++;
 
-                 console.log(products)
+                    } else {
 
-/*
-                 if (result) {
-                     const product = result.value.product.data;
+                        watch(result, value => {
+                            this.product = result.value?.product
 
 
-                     console.log(product)
-                 }
-*/
+                            if (result.value) {
 
-
-
-
-                 console.log(this.$state.product)
-
-                 let item =  this.cart.find((i) => i.id === productID);
-
-                 if (item) {
-                     item.quantity++;
-                 } else {
-
-
-                     watch(result,value => {
-
-
-                         this.$state.product = value
-
-                         this.product.price
-
-
-                         console.log(this.product.id + " id")
-                         console.log(this.product.price + " price")
-                         console.log(this.product.images)
-                         console.log(this.product.title + " title")
-                         console.log(this.quantity + " qt")
-                         console.log(this.$state.product + "product")
-                         console.log(value)
-                         console.log(result)
-
-
-                         this.cart.push({product: {
-
-                                 id:productID,
-                                 price:this.product.price
-
-                             }, quantity : 1});
-                     })
-
-
-
-
-                 }
-
-                 console.log(this.cart)
-
-     /*            this.product.id = result.value?.product.id
-                 this.product.price = result.value?.product.price
-                 this.product.title = result.value?.product.title
-                 this.product.images = result.value?.product.images
-
-
-                 watch(result,value => {
-
-
-
-                     this.product.id = value?.product.id
-                     this.product.price = value?.product.price
-                     this.product.title = value?.product.title
-                     this.product.images = value?.product.images
-
-                     this.cart.push({
-                    id : value.product.id,
-                   price : value.product.price,
-                    title : value.product.title,
-                        images : value.product.images,
-                        quantity : this.quantity
-
-                     });
-
-            console.log(this.product.id + " id")
-            console.log(this.product.price + " price")
-            console.log(this.product.images)
-            console.log(this.product.title + " title")
-                     console.log(this.quantity + " qt")
-                     console.log(this.product + "product")
-                     console.log(value)
-                     console.log(result)
-
-        })
-*/
-
-       /*          this.cart.push({
-                     id : this.product.id,
-                     price : result.value?.product.price,
-                     title : result.value?.product.title,
-                     images : result.value?.product.images,
-                     quantity : 1
-
-                 });*/
-
-             /*    let item = this.cart.find((i) => i.id === productID);
-
-                 if (item) {
-                     item.quantity++;
-                 } else {
-                     this.cart.push(this.product);
-                 }
-*/
-
-
-             } catch (error) {
-                 alert(error)
-                 console.log(error)
-             }
-
-
-
+                                this.cart.push({
+                                    id: productID,
+                                    price: value.product.price,
+                                    images:  value.product.images,
+                                    title:  value.product.title,
+                                    quantity: 1
+                                });
+                            }
+                        })
+
+               /*         if (result.value) {
+                            this.cart.push({
+                                id: productID,
+                                price: this.product?.price,
+                                images: this.product?.images,
+                                title: this.product?.title,
+                                quantity: 1
+                            });
+                        }*/
+                    }
+                },
+
+                removeFromCart(productID: any) {
+
+
+                    let item = this.cart.find((i) => i.id === productID);
+
+                    if (item) {
+                        if (item.quantity > 1) {
+                            item.quantity--;
+                        } else {
+                            this.cart = this.cart.filter((i) => i.id !== productID);
+
+                        }
+                    }
+
+
+                },
             }
-
-
-        }
-    })
-
-
-
-
-
-
+        })

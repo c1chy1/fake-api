@@ -1,5 +1,5 @@
-import { CreateProductDto, UpdateProductDto } from "../dtos/product.dto";
-import { Product } from "../models/product.model";
+import { type CreateProductDto, type UpdateProductDto } from "../dtos/product.dto";
+import { type Product } from "../models/product.model";
 
 export interface ProductService {
     create(product: CreateProductDto): Product | Promise<Product[]>;

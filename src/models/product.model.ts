@@ -1,4 +1,4 @@
-import { Category } from "./category.model";
+import { type Category } from "./category.model";
 // Use https://app.quicktype.io/
 export interface Product {
     id:          number;
@@ -6,8 +6,7 @@ export interface Product {
     price:       number;
     description: string;
     category:    Category;
-    images:      string[];
-    categoryId:  number;
+    images:      string[]
 }
 
 export interface ProductDetails {

@@ -5,54 +5,21 @@
 import { gql } from "graphql-tag";
 
 
-
-
-
 export const products = gql`
-    query Products ($id: ID!) {
-        products {
-            id
+    query products($categoryId : Float! )  {
+        products (categoryId: $categoryId){
+
             title
-            category(id: $id) {
-                name
-                image
+            id
+            price
+            images
+            description
+            category {
                 id
+                name
             }
         }
     }
 `
 ;
 
-
-/*
-
-
-import { gql } from "graphql-tag";
-
-export const products = gql`
-    query getProducts {
-        categoryList  {
-            products {
-                items {
-                    name
-                    image{
-                        url
-                    }
-
-                    price_range {
-                        maximum_price {
-
-                            final_price {
-                                value
-                            }
-                        }
-                    }
-                }
-            }
-            uid
-        
-        }
-     
-    }
-`;
-*/

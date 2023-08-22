@@ -19,11 +19,7 @@ import type {Product} from "@/types/types";
 import {ref} from "vue";
 import {provideApolloClient} from "@vue/apollo-composable";
 import {apolloClient} from "@/apollo/apollo";
-import cart from "@/stores/cart";
 
-
-
-/*const store = useProductAxios();*/
 provideApolloClient(apolloClient);
 
 const props = defineProps<{
@@ -34,14 +30,11 @@ const props = defineProps<{
 const open = ref(false)
 
 
-const test = ref(0)
 
 const addToCart = (productID:any) => {
 
   open.value = true
  props.store.addToCart(productID)
-
-  console.log(props.store.cartTotalPrice)
 };
 </script>
 

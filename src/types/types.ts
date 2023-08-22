@@ -9,14 +9,13 @@ export interface Scalars {
 
 
 
-
-export interface Product {
-
-       id: Scalars['Float'];
-
-
+export interface Cart {
+    id:    number;
+    title:  string;
+    images: string[];
+    quantity: number,
+    price: number
 }
-
 
 export interface Category {
     id:    number;
@@ -24,15 +23,26 @@ export interface Category {
     image: string;
 }
 
+export interface Categories {
+
+    categories: Array<Category>
+}
+export type CategoryGroup = {
+
+    categories: Array<Category>;
+};
+export interface Products {
+ products: Product[]
+}
 
 export interface Product {
-    id:          number;
+
     title:       string;
+    id:          number;
     price:       number;
     description: string;
-    category:    Category;
     images:      string[];
-    categoryId:  number;
+    category:    Category;
 }
 
 export interface ProductDetails {

@@ -23,36 +23,26 @@
 <script setup lang="ts">
 import {provideApolloClient} from "@vue/apollo-composable";
 import {apolloClient} from "@/apollo/apollo";
-import {computed, onMounted, ref} from "vue";
+import {computed, onMounted, ref, watch} from "vue";
 import ProductCategoryFilter from "@/components/Shop/ProductCategoryFilter.vue";
 import Product from "@/components/Shop/Product.vue";
 import {useProductGraphQL} from "@/stores/graphql";
 import ProductCart from "@/components/Shop/ProductCart.vue";
-
-import cart from "@/stores/cart";
-
 
 provideApolloClient(apolloClient);
 
 const storeGraphql = useProductGraphQL();
 
 
-
-
-function f() {
-
-
-  console.log(storeGraphql.products)
-
-}
-
-
 onMounted(()=> {
+
   storeGraphql.fetchCategories()
 
 })
+
+
 const categories = computed(() => {
-  return storeGraphql.categories;
+  return storeGraphql.$state.categories
 });
 
 const products = computed(() => {

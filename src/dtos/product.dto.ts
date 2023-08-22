@@ -1,5 +1,5 @@
-import { Product } from "../types/types";
-import { Category } from "../types/types";
+import { type Product } from "../types/types";
+import { type Category } from "../types/types";
 
 export interface CreateProductDto extends Omit<Product, 'id' | 'category'>{
     categoryId: Category['id'];

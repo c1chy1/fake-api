@@ -1,202 +1,151 @@
-import { ref, computed , reactive , toRefs} from 'vue'
-import { defineStore } from 'pinia'
+import {defineStore} from 'pinia'
 import axios from "axios";
-import {categories} from "@/apollo/queries/categories";
 
-// @ts-ignore
-import {Product, ProductDetails} from "@/models/product.model";
-import {Category} from "@/models/category.model";
+import {type Product} from "@/models/product.model";
+import {type Category} from "@/models/category.model";
+
+import {type Cart} from "@/types/types";
 
 
-
-export const useProduct =
+export const useProductAxios =
 
     defineStore("product", {
-    state: () => ({
-        products: [],
-        categories: [],
-        cart:[],
-        product: {
+        state: () => ({
+            products: [] as Array<Product>,
+            categories: [] as Array<Category>,
+            cart: [] as Array<Cart>,
+            product: {
 
-            id: 0,
-            title: ''
+                id: 0,
+                title: '',
+                price: 0,
+                images: []
 
-        }
-    }),
-    getters: {
-        getCart(state){
-            return state.cart
-        },
-        getCartItems(state){
-            return state.cart.length
-        },
-        getProducts(state){
-            return state.products
-        },
-        getCategories(state){
-            return state.categories
-        }
-    },
-    actions: {
+            },
+            totalPrice: 0
+        }),
+        getters: {
+            getCart(state) {
+                return state.cart
+            },
+            productQuantity(state)  {
 
-        async fetchCategories() {
-            try {
-                const data = await axios.get<Category[]>('https://api.escuelajs.co/api/v1/categories/')
-                this.categories = data.data
-
-            }
-            catch (error) {
-                alert(error)
-                console.log(error)
-            }
-        },
-
-        async addToCart(productID: number) {
-
-
-            try {
-                const response = await fetch(`https://api.escuelajs.co/api/v1/products/${productID}`)
-
-                const data = await response.json();
-                this.product = data
-                this.cart.push(this.product)
-
-
-            }
-            catch (error) {
-                alert(error)
-                console.log(error)
+                return state.cart.reduce(
+                    (total, product) => total + product.quantity,
+                    0
+                );
+            },
+            getProducts(state) {
+                return state.products
+            },
+            getCategories(state) {
+                return state.categories
+            },
+            getTotalCost(state) {
+                return state.totalPrice
+            },
+          cartTotalPrice(state) {
+                return state.cart.reduce((total, product) => {
+                    return total + product.price * product.quantity;
+                }, 0);
             }
         },
+        actions: {
 
-        async fetchByCategories(categoryID: number) {
-            try {
-                const data = await axios.get<Product[]>(`https://api.escuelajs.co/api/v1/products/?categoryId=${categoryID}`)
-
-                this.products = data.data.map(product => ({
-
-                    id : product.id,
-                    price : product.price,
-                    title  : product.title,
-                    description : product.description,
-                    category: {
-                        id: product.category.id,
-                        name: product.category.name
-                    },
-                    images: [...product.images]
-
-                }))
-
-            }
-            catch (error) {
-                alert(error)
-                console.log(error)
-            }
-        },
-
-/*        async fetchProducts() {
-            try {
-                const data = await axios.get('https://api.escuelajs.co/api/v1/products/')
-
-
-                this.products = data.data
+            async fetchCategories() {
+                try {
+                    const data = await axios.get<Category[]>('https://api.escuelajs.co/api/v1/categories/')
 
 
 
-          /!*      this.categoryID = data.data.map(product => ({
+                    this.categories = data.data.map(product => ({
 
-                        id: product.category.id
+                        id: product.id,
+                        name: product.name,
+                        image: product.image,
 
-                }))
-
-
-                console.log(this.categoryID)*!/
-             /!*   const formattedProducts = computed(() =>
-                    this.products
-                        .map(({ price , category }) => ({
-                          price,
-                            category : category.id,
-                            name : category.name
-                        }))
-                        .slice(0, 6)
-                        .reverse(),
-                )*!/
-
-
-
-            }
-            catch (error) {
-                alert(error)
-                console.log(error)
-            }
-        }*/
-    },
-})
-
-
-
-/*export const useProducts =
-
-    defineStore(
-    'products',
-    () => {
-
-
-        const state = reactive({
-            products: [],
-
-            title: "",
-            price: "",
-            description: "",
-            category: "",
-            images: "",
-        })
-
-
-
-        function setProduct(result : any) {
-
-
-            console.log(result)
-        }
-
-        function getProducts() {
-            const variables = ref({
-
-                title: 'bottoms',
-                price: 100,
-                description: 'desc',
-                categoryId: 1,
-                products: []
-            });
-
-            axios.get('https://api.escuelajs.co/api/v1/products/')
-                .then(response => {
-
-                    response.data = state.products
-
-                    console.log(response.data)}
-
-
-            )
-
-
-            /!*
-                    const allCategories = computed(() => result.value?.categories ?? [])
-            *!/
-
-       /!*     state.products = result.value
-
-
-            console.log(state.products)
-            console.log(result.value)*!/
-         /!*   function selectUser (id) {
-                variables.value = {
-                    id,
+                    }))
+                } catch (error) {
+                    alert(error)
+                    console.log(error)
                 }
-            }*!/
+            },
 
-        }
 
-        return {  setProduct, getProducts , ...toRefs(state) }
-    })*/
+
+            async fetchByCategories(categoryID: number) {
+                try {
+                    const data = await axios.get<Product[]>(`https://api.escuelajs.co/api/v1/products/?categoryId=${categoryID}`)
+
+                    this.products = data.data.map(product => ({
+
+                        id: product.id,
+                        price: product.price,
+                        title: product.title,
+                        description: product.description,
+                        category: {
+                            id: product.category.id,
+                            name: product.category.name,
+                            image: product.category.image
+                        },
+                        images: [...product.images]
+
+                    }))
+
+
+                } catch (error) {
+                    alert(error)
+                    console.log(error)
+                }
+            },
+            async addToCart(productID: any) {
+
+
+                try {
+                    const response = await fetch(`https://api.escuelajs.co/api/v1/products/${productID}`)
+
+                    const data = await response.json();
+                    this.product = data
+
+                    let item = this.cart.find((i) => i.id === productID);
+
+                    if (item) {
+                        item.quantity++;
+                    } else {
+                        this.cart.push({id:productID,
+                            price: this.product.price,
+                            images: this.product.images,
+                            title: this.product.title,
+                            quantity: 1});
+                    }
+                } catch (error) {
+                    alert(error)
+                    console.log(error)
+                }
+            },
+
+
+            removeFromCart(productID : any) {
+
+
+                try {
+
+                    let item = this.cart.find((i) => i.id === productID);
+
+                    if (item) {
+                        if (item.quantity > 1) {
+                            item.quantity--;
+                        } else {
+                            this.cart = this.cart.filter((i) => i.id !== productID);
+                        }
+                    }
+
+                } catch (error) {
+                    alert(error)
+                    console.log(error)
+                }
+            },
+
+        },
+    })
+
