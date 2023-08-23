@@ -1,8 +1,6 @@
 
 <template>
 
-
-<!--<Graphql></Graphql>-->
   <Navigation/>
   <router-view v-slot="{ Component }">
     <main>
@@ -14,9 +12,9 @@
 
 
 <script setup lang="ts">
-import Graphql from "@/views/Graphql.vue";
-import Axios from "@/views/Axios.vue"
 import Navigation from "@/components/Navigation.vue";
+
+import {watch} from 'vue'
 
 
 </script>

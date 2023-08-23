@@ -1,10 +1,6 @@
 import {defineStore} from 'pinia'
 import axios from "axios";
-
-import {type Product} from "@/models/product.model";
-import {type Category} from "@/models/category.model";
-
-import {type Cart} from "@/types/types";
+import type {Cart, Category, Product} from "@/types/types";
 
 
 export const useProductAxios =
@@ -15,34 +11,20 @@ export const useProductAxios =
             categories: [] as Array<Category>,
             cart: [] as Array<Cart>,
             product: {
-
                 id: 0,
                 title: '',
                 price: 0,
                 images: []
-
             },
-            totalPrice: 0
+            loading: false,
         }),
         getters: {
-            getCart(state) {
-                return state.cart
-            },
             productQuantity(state)  {
 
                 return state.cart.reduce(
                     (total, product) => total + product.quantity,
                     0
                 );
-            },
-            getProducts(state) {
-                return state.products
-            },
-            getCategories(state) {
-                return state.categories
-            },
-            getTotalCost(state) {
-                return state.totalPrice
             },
           cartTotalPrice(state) {
                 return state.cart.reduce((total, product) => {
@@ -54,10 +36,9 @@ export const useProductAxios =
 
             async fetchCategories() {
                 try {
+
+                    this.loading = true
                     const data = await axios.get<Category[]>('https://api.escuelajs.co/api/v1/categories/')
-
-
-
                     this.categories = data.data.map(product => ({
 
                         id: product.id,
@@ -65,9 +46,12 @@ export const useProductAxios =
                         image: product.image,
 
                     }))
+                    this.loading = false;
+
                 } catch (error) {
                     alert(error)
                     console.log(error)
+                    this.loading = false;
                 }
             },
 
@@ -75,6 +59,8 @@ export const useProductAxios =
 
             async fetchByCategories(categoryID: number) {
                 try {
+
+                    this.loading = true;
                     const data = await axios.get<Product[]>(`https://api.escuelajs.co/api/v1/products/?categoryId=${categoryID}`)
 
                     this.products = data.data.map(product => ({
@@ -91,11 +77,12 @@ export const useProductAxios =
                         images: [...product.images]
 
                     }))
-
+                    this.loading = false;
 
                 } catch (error) {
                     alert(error)
                     console.log(error)
+                    this.loading = false;
                 }
             },
             async addToCart(productID: any) {
@@ -104,9 +91,7 @@ export const useProductAxios =
                 try {
                     const response = await fetch(`https://api.escuelajs.co/api/v1/products/${productID}`)
 
-                    const data = await response.json();
-                    this.product = data
-
+                    this.product = await response.json()
                     let item = this.cart.find((i) => i.id === productID);
 
                     if (item) {
@@ -126,7 +111,6 @@ export const useProductAxios =
 
 
             removeFromCart(productID : any) {
-
 
                 try {
 

@@ -1,14 +1,10 @@
 <template>
 
   <select class="border-2 border-black"
-          v-model.number="category"><option
-        value="">Nothing
-    </option>
+          v-model.number="category">
     <option v-for="{ name, id } of categories"
             :key="id"
             :value="id">{{ name }}
-
-      {{id}}
     </option>
 
   </select>

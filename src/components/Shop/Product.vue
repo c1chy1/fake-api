@@ -1,7 +1,10 @@
 
 
 <template>
+
+
   <div class="w-1/2">
+
 
 
   <article class="product flex-col flex" v-for="product in products" :key="product.id">
@@ -12,7 +15,8 @@
     <AddToCart
         :product="product"
         :store="store"
-    />
+
+    >In den Warenkorb</AddToCart>
 
   </article>
   </div>
@@ -24,16 +28,11 @@ import ProductName from "@/components/Shop/ProductName.vue";
 import ProductImage from "@/components/Shop/ProductImage.vue";
 import ProductPrice from "@/components/Shop/ProductPrice.vue";
 import AddToCart from "@/components/Shop/AddToCart.vue";
-
+import LoadingSpinner from "@/components/Shop/LoadingSpinner.vue";
 
 defineProps<{
   products:Product[],
   store: any
 }>();
 
-
-
 </script>
-<style scoped>
-
-</style>

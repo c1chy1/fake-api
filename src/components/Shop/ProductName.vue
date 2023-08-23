@@ -23,12 +23,12 @@ import {toRefs} from "vue";
 
 const props = defineProps<{
   tag?: string;
-  title: any;
+  title: string;
   textDirection: 'left' | 'right' | "center"
   href?: any
 }>();
 
-const {tag, title} = toRefs(props);
+const {tag} = toRefs(props);
 
 
 </script>

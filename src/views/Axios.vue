@@ -1,6 +1,6 @@
 
 <template>
-  <section>
+  <section v-if="storeAxios">
 
 
     <ProductCategoryFilter :categories="categories"
@@ -25,11 +25,10 @@ import {useProductAxios} from "@/stores/axios";
 import ProductCategoryFilter from "@/components/Shop/ProductCategoryFilter.vue";
 import Product from "@/components/Shop/Product.vue";
 import ProductCart from "@/components/Shop/ProductCart.vue";
-const storeAxios = useProductAxios();
 
 
 const isCartOpen = ref(false);
-
+const storeAxios = useProductAxios();
 const products = computed(() => {
   return storeAxios.products
 });
@@ -49,6 +48,10 @@ const hideCart = () => {
 };
 
 onMounted(() => {
+  console.log("Axios")
+
+  const storeAxios = useProductAxios();
+
   storeAxios.fetchCategories();
 });
 

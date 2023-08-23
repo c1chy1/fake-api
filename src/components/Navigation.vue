@@ -9,7 +9,8 @@
     Axios
   </router-link>
 
-  <router-link :to="{ path: '/graphql' }"
+  <router-link
+      :to="{ path: '/graphql' }"
                class="text-teal hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base ">
     Graphql
   </router-link>
@@ -17,7 +18,10 @@
 </template>
 
 <script setup lang="ts">
+function f() {
+  window.location.reload()
 
+}
 
 </script>
 

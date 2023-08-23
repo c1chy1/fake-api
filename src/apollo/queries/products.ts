@@ -17,6 +17,7 @@ export const products = gql`
             category {
                 id
                 name
+                image
             }
         }
     }

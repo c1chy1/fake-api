@@ -3,24 +3,23 @@
 <template>
   <div id="cart" class="w-1/2 right-2 top-2">
 
-<div v-if="store.loading"> LOADING ...</div>
 
-<div v-if="store.cart.length > 0" class="product text-center" v-for="(product, index) in store.cart" :key="product.id">
+    <div  class="product text-center" v-for="(product) in store.cart" :key="product.id">
+
+
 
     <ProductPrice :price="product.price"/>
     <ProductName  :title="product.title" text-direction="center"/>
-    <ProductImage v-for="image in product.images" :src="image" :alt="product.title"/>
-
-  <ProductQuantity :quantity="product.quantity"/>
-
-  <div class="flex flex-col">
-
+      <ProductImage  v-for="image in product.images" :src="image" :alt="product.title"/>
+      <ProductQuantity :quantity="product.quantity"/>
+      <div class="flex flex-col">
     <ProductRemoveFromCart :product="product" :store="store" />
+</div>
 
 
 </div>
-  <p>{{index}}</p>
-</div>
+
+
     <SummaryPrice  :store="store"/></div>
 
 </template>
@@ -30,8 +29,9 @@
  import ProductImage from "@/components/Shop/ProductImage.vue";
  import ProductRemoveFromCart from "@/components/Shop/ProductRemoveFromCart.vue";
  import SummaryPrice from "@/components/Shop/SummaryPrice.vue";
- import {onMounted, ref} from "vue";
  import ProductQuantity from "@/components/Shop/ProductQuantity.vue";
+ import LoadingSpinner from "@/components/Shop/LoadingSpinner.vue";
+
 
 
  const props = defineProps<{
@@ -41,12 +41,6 @@
 
  const store = props.store;
 
-onMounted(()=> {
-
-  props.store.getCart
-
-
-})
 </script>
 <style scoped>
 
