@@ -20,6 +20,7 @@ export const useProductGraphQL =
                 cart: [] as Array<Cart>,
                 product: null,
                 loading: false,
+                cartOpen: false,
             }),
             getters: {
                 productQuantity(state) {
@@ -38,6 +39,14 @@ export const useProductGraphQL =
             },
             actions: {
 
+
+                toggleCart(state?: boolean) {
+                    if (typeof state === "boolean") {
+                        this.cartOpen = state;
+                    } else {
+                        this.cartOpen = !this.cartOpen;
+                    }
+                },
                 async fetchCategories()  {
                     this.loading = true;
 
@@ -133,8 +142,6 @@ export const useProductGraphQL =
                             this.product = result.value?.product
 
 
-
-
                             if (result.value) {
 
                                 this.cart.push({
@@ -142,6 +149,7 @@ export const useProductGraphQL =
                                     price: value.product.price,
                                     images: value.product.images,
                                     title: value.product.title,
+                                    description: value.product.description,
                                     quantity: 1
                                 });
                             }
@@ -153,6 +161,7 @@ export const useProductGraphQL =
                                 price: result.value?.product.price,
                                 images: result.value?.product.images,
                                 title: result.value?.product.title,
+                                description: result.value?.product.description,
                                 quantity: 1
                             });
                         }

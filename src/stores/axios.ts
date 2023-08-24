@@ -13,10 +13,12 @@ export const useProductAxios =
             product: {
                 id: 0,
                 title: '',
+                description:'',
                 price: 0,
                 images: []
             },
             loading: false,
+            cartOpen: false,
         }),
         getters: {
             productQuantity(state)  {
@@ -34,10 +36,21 @@ export const useProductAxios =
         },
         actions: {
 
+
+
+            toggleCart(state?: boolean) {
+                if (typeof state === "boolean") {
+                    this.cartOpen = state;
+                } else {
+                    this.cartOpen = !this.cartOpen;
+                }
+            },
+
             async fetchCategories() {
+
+                this.loading = true
                 try {
 
-                    this.loading = true
                     const data = await axios.get<Category[]>('https://api.escuelajs.co/api/v1/categories/')
                     this.categories = data.data.map(product => ({
 
@@ -46,21 +59,27 @@ export const useProductAxios =
                         image: product.image,
 
                     }))
-                    this.loading = false;
 
                 } catch (error) {
                     alert(error)
                     console.log(error)
-                    this.loading = false;
+
+                }
+                finally
+                {
+                    this.loading = false
                 }
             },
 
 
 
             async fetchByCategories(categoryID: number) {
+
+                this.loading = true;
+
                 try {
 
-                    this.loading = true;
+
                     const data = await axios.get<Product[]>(`https://api.escuelajs.co/api/v1/products/?categoryId=${categoryID}`)
 
                     this.products = data.data.map(product => ({
@@ -77,12 +96,14 @@ export const useProductAxios =
                         images: [...product.images]
 
                     }))
-                    this.loading = false;
+
 
                 } catch (error) {
                     alert(error)
                     console.log(error)
-                    this.loading = false;
+                } finally {
+
+                    this.loading = false
                 }
             },
             async addToCart(productID: any) {
@@ -90,6 +111,8 @@ export const useProductAxios =
 
                 try {
                     const response = await fetch(`https://api.escuelajs.co/api/v1/products/${productID}`)
+
+
 
                     this.product = await response.json()
                     let item = this.cart.find((i) => i.id === productID);
@@ -101,6 +124,7 @@ export const useProductAxios =
                             price: this.product.price,
                             images: this.product.images,
                             title: this.product.title,
+                            description: this.product.description,
                             quantity: 1});
                     }
                 } catch (error) {

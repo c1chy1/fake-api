@@ -2,10 +2,9 @@
 <template>
 
   <component
-      class="text-gray-900 font-bold"
-      :href="props.href"
-      v-if="props.title"
-      :is="tag || 'h3'"
+      class="mt-2 text-gray-600"
+      v-if="props.description"
+      :is="tag || 'div'"
       :class="[
 
       textSize === 'big'   ? 'text-xl' :
@@ -14,7 +13,7 @@
       textDirection === 'left'   ? 'text-left' :
       textDirection === 'center' ? 'text-center' :
       textDirection === 'right'  ? 'text-right' : '']"
-  >{{ props.title }}
+  >{{ props.description }}
     <slot></slot>
 
   </component>
@@ -25,10 +24,9 @@ import {toRefs} from "vue";
 
 const props = defineProps<{
   tag?: string;
-  title: string;
+  description: string;
+  textSize: string;
   textDirection: 'left' | 'right' | "center"
-  textSize: 'big' | 'medium' | "low"
-  href?: any
 }>();
 
 const {tag} = toRefs(props);

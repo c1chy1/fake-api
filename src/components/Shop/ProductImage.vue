@@ -1,11 +1,11 @@
 
 
 <template>
+  <div class="grid-cols-3">
+  <img class=" w-16 h-16 bg-cover" :src="src" :alt="alt">
+  </div>
 
-  <img :src="src" :alt="alt"
 
-
-  >
 </template>
 <script setup lang="ts">
  defineProps<{
@@ -21,10 +21,4 @@
 <style scoped>
 
 
-img {
-
-  width: 6rem;
-  height: 6rem;
-
-}
 </style>

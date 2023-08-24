@@ -1,11 +1,11 @@
 
 <template>
-
-<h3>
-  Summary : {{store.productQuantity}}
-
-  {{store.cartTotalPrice}} €</h3>
-
+  <div class="flex flex-col text-right py-2 mr-8">
+  <h2 class="mt-3  font-bold">Summe: {{store.cartTotalPrice}} €</h2>
+<h3 class="mt-3 font-bold">
+  Menge: {{store.productQuantity}}
+</h3>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -26,12 +26,3 @@ watch(price, async () => {
 })
 
 </script>
-
-
-<style scoped>
-
-</style>
-
-<style scoped>
-
-</style>

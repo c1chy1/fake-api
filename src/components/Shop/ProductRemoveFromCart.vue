@@ -5,7 +5,7 @@
       @click="removeFromCart(product.id)"
       class="button bg-white"
       ref="button"
-  ><span class="hover:text-tertiary border uppercase font-semibold text-xs px-10 tracking-widest">Remove</span>
+  ><span class="hover:text-tertiary border uppercase font-semibold text-xs px-4 tracking-widest">Remove</span>
 
   </button>
 
@@ -14,7 +14,6 @@
 <script setup lang="ts">
 
 import type {Product} from "@/types/types";
-import {onMounted, ref} from "vue";
 import {provideApolloClient} from "@vue/apollo-composable";
 import {apolloClient} from "@/apollo/apollo";
 
@@ -25,31 +24,11 @@ const props = defineProps<{
   store: any
 }>();
 
-const cart =  ref([])
-
-const price = ref(0)
-
-
-onMounted(()=> {
-
-  cart.value =  props.store.getCart
- price.value =  props.store.cartTotalPrice
-})
-
-
-const index = ref(0)
-
-
 const removeFromCart = (productID : any ) => {
 
-
-  console.log(props.product.id)
-
-
   props.store.removeFromCart(productID)
-  cart.value =  props.store.getCart
+  if (props.store.cart.length === 0) props.store.toggleCart(false)
 
-  console.log(productID)
 
 };
 </script>

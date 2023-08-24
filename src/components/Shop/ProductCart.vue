@@ -1,66 +1,45 @@
-
-
 <template>
-  <div id="cart" class="w-1/2 right-2 top-2">
+
+    <section v-if="store.cartOpen"
+             class="mx-auto w-1/3 right-2 top-2 fixed bg-white px-4 text-center   transition-all duration-100  will-change-transform transform">
 
 
-    <div  class="product text-center" v-for="(product) in store.cart" :key="product.id">
+      <CartHeader :store="store"/>
+      <ul class="product list-reset grid text-center">
+        <li class="border-solid border-b py-4 items-center grid grid-cols-4 "
+            v-for="(product) in store.cart"
+            :key="product.id">
+          <ProductImage v-for="image in product.images" :src="image" :alt="product.title"/>
+          <ProductName text-size="medium" :title="product.title" text-direction="center"/>
+          <ProductDescription text-size="low" text-direction="center" :description="product.description"/>
+          <ProductRemoveFromCart class="mt-6" :product="product" :store="store"/>
+          <ProductPrice :price="product.price"/>
+          <ProductQuantity :quantity="product.quantity"/>
+        </li>
 
+      </ul>
+      <SummaryPrice :store="store"/>
 
-
-    <ProductPrice :price="product.price"/>
-    <ProductName  :title="product.title" text-direction="center"/>
-      <ProductImage  v-for="image in product.images" :src="image" :alt="product.title"/>
-      <ProductQuantity :quantity="product.quantity"/>
-      <div class="flex flex-col">
-    <ProductRemoveFromCart :product="product" :store="store" />
-</div>
-
-
-</div>
-
-
-    <SummaryPrice  :store="store"/></div>
+    </section>
 
 </template>
 <script setup lang="ts">
- import ProductPrice from "@/components/Shop/ProductPrice.vue";
- import ProductName from "@/components/Shop/ProductName.vue";
- import ProductImage from "@/components/Shop/ProductImage.vue";
- import ProductRemoveFromCart from "@/components/Shop/ProductRemoveFromCart.vue";
- import SummaryPrice from "@/components/Shop/SummaryPrice.vue";
- import ProductQuantity from "@/components/Shop/ProductQuantity.vue";
- import LoadingSpinner from "@/components/Shop/LoadingSpinner.vue";
+import ProductPrice from "@/components/Shop/ProductPrice.vue";
+import ProductName from "@/components/Shop/ProductName.vue";
+import ProductImage from "@/components/Shop/ProductImage.vue";
+import ProductRemoveFromCart from "@/components/Shop/ProductRemoveFromCart.vue";
+import SummaryPrice from "@/components/Shop/SummaryPrice.vue";
+import ProductQuantity from "@/components/Shop/ProductQuantity.vue";
+import LoadingSpinner from "@/components/Shop/LoadingSpinner.vue";
+import ProductDescription from "@/components/Shop/ProductDescription.vue";
+import CartHeader from "@/components/Shop/CartHeader.vue";
 
 
+const props = defineProps<{
 
- const props = defineProps<{
+  store: any
+}>();
 
-   store:any
- }>();
-
- const store = props.store;
+const store = props.store;
 
 </script>
-<style scoped>
-
-
-img {
-
-  width: 6rem;
-  height: 6rem;
-
-}
-
-#cart {
-
-  position: relative;
-  right: 0;
-  top: 0;
-  z-index: 100;
-  width: 50%;
-  height: 6rem;
-
-}
-
-</style>
