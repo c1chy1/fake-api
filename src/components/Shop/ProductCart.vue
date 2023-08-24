@@ -1,7 +1,9 @@
 <template>
 
-    <section v-if="store.cartOpen"
-             class="mx-auto w-1/3 right-2 top-2 fixed bg-white px-4 text-center   transition-all duration-100  will-change-transform transform">
+    <section
+
+             :class="[!store.cartOpen ? 'translate-y-[120vh]' : 'translate-y-0']"
+             class="transition-all duration-300 mx-auto w-1/3 right-2 top-2 fixed bg-gray-200 px-4 text-center ">
 
 
       <CartHeader :store="store"/>

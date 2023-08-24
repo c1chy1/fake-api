@@ -11,7 +11,9 @@
         type="button"
     >
       <slot />
-<!--  <LoadingSpinner :store="store"/>-->
+
+
+  <LoadingSpinner :store="store"/>
     </button>
 
   </div>

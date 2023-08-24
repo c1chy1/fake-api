@@ -15,6 +15,7 @@ export const product = gql`
                     id
                     price
                     images
+                    description
                 }
             }
     `

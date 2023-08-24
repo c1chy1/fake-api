@@ -1,13 +1,13 @@
 
 
 <template>
-  <div class=" border-solid border-b py-4 text-center justify-center grid grid-cols-4">
+  <div class=" border-solid border-b py-4 text-center justify-center grid grid-cols-4 font-bold text-base">
 
-   <button @click="close" class="absolute left-0 top-0 text-xl">X</button>
-    <p class=" text-xl font-bold">Shopping Cart</p>
-    <p class=" text-xl font-bold">Title</p>
-    <p class=" font-bold text-center">Price</p>
-    <p class=" font-bold text-center">Quantity</p>
+   <button @click="close" class="absolute right-4 top-1 text-xl">X</button>
+    <p>Shopping Cart</p>
+    <p>Title</p>
+    <p>Price</p>
+    <p>Quantity</p>
   </div>
 </template>
 <script setup lang="ts">
