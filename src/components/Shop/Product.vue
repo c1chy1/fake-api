@@ -3,9 +3,9 @@
 <template>
 
 
-  <div class="w-full grid grid-cols-3 gap-5 px-12 content-center items-center">
+  <div class=" grid grid-cols-3 gap-5 px-12 content-center items-center">
     <article
-        class="py-6 flex max-w-md bg-white shadow-lg rounded-lg overflow-hidden content-center justify-center " v-for="product in products" :key="product.id">
+        class="py-6 flex  h-64  bg-white shadow-lg rounded-lg overflow-hidden content-center justify-center " v-for="product in products" :key="product.id">
       <div class="flex-col">
           <ProductImage v-for="image in product.images" :key="image" :src="image" :alt="product.title"/>
         </div>
