@@ -1,10 +1,5 @@
-
 <template>
-
-
-<nav >
-
-  <router-link  :to="{ path: '/axios' }"
+  <nav><router-link  :to="{ path: '/axios' }"
                class="text-teal hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base ">
     Axios
   </router-link>
@@ -18,10 +13,6 @@
 </template>
 
 <script setup lang="ts">
-function f() {
-  window.location.reload()
-
-}
 
 </script>
 

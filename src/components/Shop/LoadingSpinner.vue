@@ -4,7 +4,7 @@
 
       <svg
           v-if="store.loading"
-          class="-mt-6 -ml-2 animate-spin"
+          class="-ml-2 animate-spin"
           width="25"
           height="25"
           viewBox="0 0 24 24"

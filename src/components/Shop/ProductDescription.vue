@@ -30,10 +30,4 @@ const props = defineProps<{
 }>();
 
 const {tag} = toRefs(props);
-
-
 </script>
-
-<style scoped>
-
-</style>

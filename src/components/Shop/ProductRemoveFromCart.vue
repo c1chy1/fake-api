@@ -32,8 +32,3 @@ const removeFromCart = (productID : any ) => {
 
 };
 </script>
-
-
-<style scoped>
-
-</style>

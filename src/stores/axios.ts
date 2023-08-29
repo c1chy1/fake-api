@@ -115,7 +115,7 @@ export const useProductAxios =
 
 
                     this.product = await response.json()
-                    let item = this.cart.find((i) => i.id === productID);
+                    const item = this.cart.find((i) => i.id === productID);
 
                     if (item) {
                         item.quantity++;
@@ -138,7 +138,7 @@ export const useProductAxios =
 
                 try {
 
-                    let item = this.cart.find((i) => i.id === productID);
+                    const item = this.cart.find((i) => i.id === productID);
 
                     if (item) {
                         if (item.quantity > 1) {

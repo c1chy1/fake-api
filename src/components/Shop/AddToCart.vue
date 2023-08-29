@@ -5,39 +5,30 @@
 
     <button
         class="hover:text-tertiary border uppercase font-semibold text-xs px-10 tracking-widest"
-        :class="{ disabled: store.loading, open : 'loading' }"
+        :class="{ disabled: props.store.loading, open : 'loading' }"
 
         @click="addToCart(product.id)"
         type="button"
     >
+
       <slot />
 
 
   <LoadingSpinner :store="store"/>
     </button>
-
   </div>
   <div v-else >
     <button
-        :class="{ disabled: store.loading , open : 'loading' }"
+        :class="{ disabled: props.store.loading , open : 'loading' }"
         class="hover:text-tertiary border uppercase font-semibold text-xs px-10 tracking-widest"
         type="button"
         @click="addToCart(product.id)"
     >
+      in den Warenkorb
       <slot />
       <LoadingSpinner :store="store"/>
     </button>
   </div>
-<!--  <button
-      @keyup.enter="addToCart(product.id)"
-      @click="addToCart(product.id)"
-      class="button bg-white"
-      :class="open ? 'loading' : ''"
-      ref="open"
-  >
-    <span class="hover:text-tertiary border uppercase font-semibold text-xs px-10 tracking-widest">In Den Warenkorb</span>
-
-  </button>-->
 
 </template>
 

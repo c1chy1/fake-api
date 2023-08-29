@@ -1,6 +1,6 @@
 import {defineStore} from 'pinia'
-import {useQuery, useApolloClient ,  useQueryLoading  } from "@vue/apollo-composable";
-import {reactive, watch , ref} from "vue";
+import {useQuery, useApolloClient} from "@vue/apollo-composable";
+import {reactive, watch } from "vue";
 import {categories} from "@/apollo/queries/categories";
 import {products} from "@/apollo/queries/products";
 import {product} from "@/apollo/queries/product";
@@ -131,7 +131,7 @@ export const useProductGraphQL =
 
                     this.product = result.value?.product
 
-                    let item = this.cart.find((i) => i.id === productID);
+                    const item = this.cart.find((i) => i.id === productID);
 
                     if (item) {
                         item.quantity++;
@@ -176,7 +176,7 @@ export const useProductGraphQL =
                 removeFromCart(productID: any) {
 
 
-                    let item = this.cart.find((i) => i.id === productID);
+                    const item = this.cart.find((i) => i.id === productID);
 
                     if (item) {
                         if (item.quantity > 1) {

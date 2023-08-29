@@ -24,8 +24,6 @@ const props = defineProps<{
 
 }>();
 
-
-
 function handleClick() {
   props.store.toggleCart();
 }

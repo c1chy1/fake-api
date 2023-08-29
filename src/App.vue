@@ -14,9 +14,6 @@
 <script setup lang="ts">
 import Navigation from "@/components/Navigation.vue";
 
-import {watch} from 'vue'
-
-
 </script>
 
 <style scoped>

@@ -35,7 +35,3 @@ const {tag} = toRefs(props);
 
 
 </script>
-
-<style scoped>
-
-</style>

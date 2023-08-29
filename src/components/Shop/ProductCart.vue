@@ -8,22 +8,25 @@
 
       <CartHeader :store="store"/>
       <ul class="product list-reset grid text-center">
-        <li class="border-solid border-b py-4 items-center grid grid-cols-4 "
+        <li
+            class="border-solid border-b py-4 items-center grid grid-cols-4 "
             v-for="(product) in store.cart"
             :key="product.id">
-          <ProductImage v-for="image in product.images" :src="image" :alt="product.title"/>
+          <div class="flex-col mx-auto">
+          <ProductImage v-for="image in product.images" :key="image" :src="image" :alt="product.title"/>
+          </div>
+          <div>
           <ProductName text-size="medium" :title="product.title" text-direction="center"/>
           <ProductDescription text-size="low" text-direction="center" :description="product.description"/>
+
           <ProductRemoveFromCart class="mt-6" :product="product" :store="store"/>
+          </div>
           <ProductPrice :price="product.price"/>
           <ProductQuantity :quantity="product.quantity"/>
         </li>
-
       </ul>
       <SummaryPrice :store="store"/>
-
     </section>
-
 </template>
 <script setup lang="ts">
 import ProductPrice from "@/components/Shop/ProductPrice.vue";
@@ -32,16 +35,12 @@ import ProductImage from "@/components/Shop/ProductImage.vue";
 import ProductRemoveFromCart from "@/components/Shop/ProductRemoveFromCart.vue";
 import SummaryPrice from "@/components/Shop/SummaryPrice.vue";
 import ProductQuantity from "@/components/Shop/ProductQuantity.vue";
-import LoadingSpinner from "@/components/Shop/LoadingSpinner.vue";
 import ProductDescription from "@/components/Shop/ProductDescription.vue";
 import CartHeader from "@/components/Shop/CartHeader.vue";
 
-
-const props = defineProps<{
+ defineProps<{
 
   store: any
 }>();
-
-const store = props.store;
 
 </script>

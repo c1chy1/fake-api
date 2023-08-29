@@ -22,7 +22,6 @@ import ProductCategoryFilter from "@/components/Shop/ProductCategoryFilter.vue";
 import Product from "@/components/Shop/Product.vue";
 import {useProductGraphQL} from "@/stores/graphql";
 import ProductCart from "@/components/Shop/ProductCart.vue";
-import LoadingSpinner from "@/components/Shop/LoadingSpinner.vue";
 import CartIcon from "@/components/Shop/CartIcon.vue";
 
 
@@ -46,6 +45,3 @@ const products = computed(() => {
 });
 
 </script>
-<style scoped>
-
-</style>

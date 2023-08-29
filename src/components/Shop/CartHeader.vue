@@ -1,5 +1,3 @@
-
-
 <template>
   <div class=" border-solid border-b py-4 text-center justify-center grid grid-cols-4 font-bold text-base">
 
